@@ -9,6 +9,13 @@ Next.js + Feature-Sliced Design(FSD) 기반 프로젝트입니다.
 - **Styling**: Tailwind CSS v4
 - **Architecture**: Feature-Sliced Design (FSD)
 
+## 🎨 브랜드 컬러
+
+- **Primary**: `#48A2E2` - 메인 브랜드 컬러 (밝은 파란색)
+- **Secondary**: `#C9DAED` - 보조 컬러 (연한 하늘색)
+
+Tailwind에서 `bg-primary`, `text-primary`, `border-primary` 등으로 사용 가능합니다.
+
 ## 📁 폴더 구조
 
 ```
@@ -105,7 +112,7 @@ Next.js의 `app/` 폴더에서 FSD의 `src/pages` 컴포넌트를 import하여 �
 
 ```tsx
 // app/room/[roomId]/page.tsx
-import { MeetingPage } from '@/pages/meeting/MeetingPage';
+import { MeetingPage } from '@/pages/meeting';
 
 export default function RoomPage({ params }: { params: { roomId: string } }) {
   return <MeetingPage roomId={params.roomId} />;
@@ -113,7 +120,7 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
 ```
 
 ```tsx
-// src/pages/meeting/MeetingPage.tsx
+// src/pages/meeting/ui/MeetingPage.tsx
 export function MeetingPage({ roomId }: { roomId: string }) {
   return <div>Meeting Room: {roomId}</div>;
 }
