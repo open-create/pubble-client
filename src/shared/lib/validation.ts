@@ -53,6 +53,23 @@ export function validatePassword(password: string): ValidationResult {
 }
 
 /**
+ * 로그인 비밀번호 검사
+ * - 필수 입력
+ * - 최대 20자
+ */
+export function validateLoginPassword(password: string): ValidationResult {
+  if (!password) {
+    return { isValid: false, error: '비밀번호를 입력해주세요.' };
+  }
+
+  if (password.length > 20) {
+    return { isValid: false, error: '비밀번호는 최대 20자까지 입력 가능합니다.' };
+  }
+
+  return { isValid: true };
+}
+
+/**
  * 비밀번호 확인 검사
  */
 export function validatePasswordConfirm(
