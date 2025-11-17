@@ -3,7 +3,7 @@
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input, Button } from '@/shared/ui';
-import { validateEmail, validateLoginPassword } from '@/shared/lib';
+import { markUserAuthenticated, validateEmail, validateLoginPassword } from '@/shared/lib';
 
 interface LoginFormData {
   email: string;
@@ -95,6 +95,7 @@ export function LoginForm() {
       const result = await mockLogin(formData.email, formData.password);
 
       if (result.success) {
+        markUserAuthenticated();
         router.push('/');
       } else {
         setAuthError('이메일 또는 비밀번호가 올바르지 않습니다.');
