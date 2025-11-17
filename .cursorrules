@@ -1,0 +1,22 @@
+# Cursor Rules
+
+## Architecture
+
+- This project uses Feature-Sliced Design (FSD).
+- Folder dependency order (from upper -> lower):
+
+  1. app
+  2. pages
+  3. widgets
+  4. features
+  5. entities
+  6. shared
+
+- Higher layers may import lower layers.
+- Lower layers **must not** import higher layers.
+
+## Working Rules
+
+- When creating new components, place them in the correct FSD layer.
+- Do not create files inside the root app folder except route files.
+- Use /src for all FSD layers.
