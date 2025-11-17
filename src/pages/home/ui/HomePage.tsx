@@ -4,14 +4,12 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Meeting, mockMeetings } from '@/entities/meeting';
 import { AUTH_CHANGE_EVENT, clearAuthState, isUserAuthenticated } from '@/shared/lib';
-import {
-  HomeAuthHeader,
-  HomeFeatureHighlights,
-  HomeHero,
-  HomeHowItWorks,
-  HomePublicHeader,
-  HomeRecentMeetings,
-} from '@/widgets/home';
+import { AuthHeader } from './components/AuthHeader';
+import { PublicHeader } from './components/PublicHeader';
+import { Hero } from './components/Hero';
+import { RecentMeetings } from './components/RecentMeetings';
+import { FeatureHighlights } from './components/FeatureHighlights';
+import { HowItWorks } from './components/HowItWorks';
 import { SiteFooter } from '@/widgets/site-footer';
 
 export function HomePage() {
@@ -69,13 +67,13 @@ function AuthenticatedHome({ onLogout }: { onLogout: () => void }) {
   return (
     <div className="min-h-screen bg-slate-50 text-gray-900">
       <div className="max-w-6xl mx-auto px-6 py-8 space-y-8">
-        <HomeAuthHeader onLogout={handleLogout} />
-        <HomeHero
+        <AuthHeader onLogout={handleLogout} />
+        <Hero
           variant="auth"
           onCreateMeeting={() => router.push('/meetings/new')}
           onViewMinutes={() => router.push('/minutes')}
         />
-        <HomeRecentMeetings
+        <RecentMeetings
           meetings={meetings}
           onMeetingClick={handleMeetingClick}
           onViewAll={() => router.push('/meetings')}
@@ -96,17 +94,17 @@ function PublicHome() {
   return (
     <div className="min-h-screen bg-linear-to-b from-white via-secondary/20 to-white text-gray-900">
       <div className="max-w-6xl mx-auto px-6">
-        <HomePublicHeader
+        <PublicHeader
           onLogin={() => router.push('/login')}
           onSignup={() => router.push('/signup')}
         />
-        <HomeHero
+        <Hero
           variant="public"
           onLogin={() => router.push('/login')}
           onScrollHowItWorks={scrollToHowItWorks}
         />
-        <HomeHowItWorks />
-        <HomeFeatureHighlights />
+        <HowItWorks />
+        <FeatureHighlights />
       </div>
       <SiteFooter />
     </div>
