@@ -3,7 +3,7 @@ import { SignupForm } from '@/features/auth/signup';
 
 export function SignupPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-secondary/30 px-4">
+    <div className="min-h-[calc(100vh-60px)] flex items-center justify-center bg-secondary/30 px-4">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-lg shadow-lg p-8">
           {/* 헤더 */}
