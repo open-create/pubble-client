@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { InviteModal } from '@/features/meeting/invite-modal';
-import { Button } from '@/shared/ui';
+import { Button } from '@/shared/ui/button';
 
 interface MeetingDetailPageProps {
   roomId: string;
@@ -11,19 +11,12 @@ interface MeetingDetailPageProps {
 
 export function MeetingDetailPage({ roomId }: MeetingDetailPageProps) {
   const searchParams = useSearchParams();
-  const [showInviteModal, setShowInviteModal] = useState(false);
-  const [isWelcome, setIsWelcome] = useState(false);
+  const shouldShowInvite = searchParams?.get('showInvite') === 'true';
+  const [showInviteModal, setShowInviteModal] = useState(shouldShowInvite);
+  const [isWelcome, setIsWelcome] = useState(shouldShowInvite);
 
   // Query parameter로 전달된 회의 제목 (없으면 기본값)
   const meetingTitle = searchParams?.get('title') || '새 회의';
-
-  useEffect(() => {
-    // 회의 생성 직후 진입한 경우 환영 모달 자동 열기
-    if (searchParams?.get('showInvite') === 'true') {
-      setShowInviteModal(true);
-      setIsWelcome(true);
-    }
-  }, [searchParams]);
 
   return (
     <div className="min-h-screen bg-gray-100">

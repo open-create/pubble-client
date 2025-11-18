@@ -1,0 +1,1 @@
+// entity/message/index.ts

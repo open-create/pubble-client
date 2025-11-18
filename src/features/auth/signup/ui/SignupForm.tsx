@@ -1,14 +1,14 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
-import { Input } from '@/shared/ui';
-import { Button } from '@/shared/ui';
+import { Input } from '@/shared/ui/input';
+import { Button } from '@/shared/ui/button';
 import {
   validateEmail,
   validatePassword,
   validatePasswordConfirm,
   validateNickname,
-} from '@/shared/lib';
+} from '@/shared/lib/validation';
 
 interface SignupFormData {
   email: string;

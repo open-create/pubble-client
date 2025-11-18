@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Meeting, mockMeetings } from '@/entities/meeting';
-import { AUTH_CHANGE_EVENT, clearAuthState, isUserAuthenticated } from '@/shared/lib';
+import type { Meeting } from '@/entities/meeting';
+import { mockMeetings } from '@/entities/meeting';
+import { AUTH_CHANGE_EVENT, clearAuthState, isUserAuthenticated } from '@/shared/lib/auth';
 import { AuthHeader } from './components/AuthHeader';
 import { PublicHeader } from './components/PublicHeader';
 import { Hero } from './components/Hero';

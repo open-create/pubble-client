@@ -2,8 +2,10 @@
 
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Input, Button } from '@/shared/ui';
-import { markUserAuthenticated, validateEmail, validateLoginPassword } from '@/shared/lib';
+import { Input } from '@/shared/ui/input';
+import { Button } from '@/shared/ui/button';
+import { markUserAuthenticated } from '@/shared/lib/auth';
+import { validateEmail, validateLoginPassword } from '@/shared/lib/validation';
 
 interface LoginFormData {
   email: string;
