@@ -54,9 +54,8 @@ function AuthenticatedHome({ onLogout }: { onLogout: () => void }) {
   const [meetings] = useState<Meeting[]>(mockMeetings);
 
   const handleMeetingClick = (meeting: Meeting) => {
-    const target =
-      meeting.status === 'ongoing' ? `/meetings/${meeting.id}` : `/minutes/${meeting.id}`;
-    router.push(target);
+    // 진행 중이든 종료되었든 회의방으로 이동 (종료된 회의는 읽기 전용)
+    router.push(`/meetings/${meeting.id}`);
   };
 
   const handleLogout = () => {
