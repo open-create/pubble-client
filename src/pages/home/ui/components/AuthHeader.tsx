@@ -4,11 +4,11 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import type { SVGProps } from 'react';
 
-interface HomeAuthHeaderProps {
+interface AuthHeaderProps {
   onLogout: () => void;
 }
 
-export function HomeAuthHeader({ onLogout }: HomeAuthHeaderProps) {
+export function AuthHeader({ onLogout }: AuthHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 

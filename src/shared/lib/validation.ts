@@ -108,3 +108,25 @@ export function validateNickname(nickname: string): ValidationResult {
 
   return { isValid: true };
 }
+
+/**
+ * 방 비밀번호 유효성 검사
+ * - 4~8자
+ * - 숫자만 가능
+ */
+export function validateRoomPassword(password: string): ValidationResult {
+  if (!password) {
+    return { isValid: false, error: '비밀번호를 입력해주세요.' };
+  }
+
+  if (password.length < 4 || password.length > 8) {
+    return { isValid: false, error: '비밀번호는 4~8자로 입력해주세요.' };
+  }
+
+  const numberRegex = /^[0-9]+$/;
+  if (!numberRegex.test(password)) {
+    return { isValid: false, error: '비밀번호는 숫자만 사용 가능합니다.' };
+  }
+
+  return { isValid: true };
+}

@@ -1,5 +1,5 @@
-import { MeetingPage } from '@/pages/meeting';
+import { MeetingDetailPage } from '@/pages/meetings/detail';
 
 export default function RoomPage({ params }: { params: { roomId: string } }) {
-  return <MeetingPage roomId={params.roomId} />;
+  return <MeetingDetailPage roomId={params.roomId} />;
 }

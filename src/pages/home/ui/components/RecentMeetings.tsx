@@ -4,17 +4,13 @@ import { useMemo } from 'react';
 import type { Meeting } from '@/entities/meeting';
 import { Button } from '@/shared/ui';
 
-interface HomeRecentMeetingsProps {
+interface RecentMeetingsProps {
   meetings: Meeting[];
   onMeetingClick: (meeting: Meeting) => void;
   onViewAll: () => void;
 }
 
-export function HomeRecentMeetings({
-  meetings,
-  onMeetingClick,
-  onViewAll,
-}: HomeRecentMeetingsProps) {
+export function RecentMeetings({ meetings, onMeetingClick, onViewAll }: RecentMeetingsProps) {
   const hasMeetings = meetings.length > 0;
 
   const statusMeta = useMemo(

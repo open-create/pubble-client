@@ -2,7 +2,7 @@
 
 import { Button } from '@/shared/ui';
 
-type HomeHeroProps =
+type HeroProps =
   | {
       variant: 'auth';
       onCreateMeeting: () => void;
@@ -14,7 +14,7 @@ type HomeHeroProps =
       onScrollHowItWorks: () => void;
     };
 
-export function HomeHero(props: HomeHeroProps) {
+export function Hero(props: HeroProps) {
   if (props.variant === 'auth') {
     return (
       <section className="bg-primary text-white rounded-3xl p-8 md:p-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between shadow-lg">

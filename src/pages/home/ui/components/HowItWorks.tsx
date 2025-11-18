@@ -16,17 +16,22 @@ const steps = [
   },
 ];
 
-export function HomeHowItWorks() {
+export function HowItWorks() {
   return (
     <section id="how-it-works" className="py-16">
       <div className="mb-10">
-        <p className="text-sm uppercase tracking-[0.3em] text-primary font-semibold mb-3">How it works</p>
-        <h2 className="text-3xl font-bold">“어떻게 쓰는지” 3단계</h2>
+        <p className="text-sm uppercase tracking-[0.3em] text-primary font-semibold mb-3">
+          How it works
+        </p>
+        <h2 className="text-3xl font-bold">"어떻게 쓰는지" 3단계</h2>
       </div>
 
       <div className="grid gap-6 md:grid-cols-3">
         {steps.map((step) => (
-          <div key={step.title} className="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
+          <div
+            key={step.title}
+            className="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm"
+          >
             <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center font-semibold text-lg mb-4">
               {step.icon}
             </div>
