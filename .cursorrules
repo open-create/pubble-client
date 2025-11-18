@@ -1,22 +1,142 @@
-# Cursor Rules
+# Architecture – Feature-Sliced Design
 
-## Architecture
+We use Feature-Sliced Design (FSD) in this project.
 
-- This project uses Feature-Sliced Design (FSD).
-- Folder dependency order (from upper -> lower):
+## Layers (from top to bottom)
 
-  1. app
-  2. pages
-  3. widgets
-  4. features
-  5. entities
-  6. shared
+1. app # Next.js routing only (app/ at repo root)
+2. processes # (optional) cross-page flows
+3. pages # page-level composition
+4. widgets # reusable, page-agnostic UI sections
+5. features # user-facing actions / use-cases
+6. entities # domain models (Room, Message, User, ...)
+7. shared # pure shared utilities, UI primitives, config
 
-- Higher layers may import lower layers.
-- Lower layers **must not** import higher layers.
+### Layer dependency rules
 
-## Working Rules
+- Upper layers may depend on the same or lower layers.
+- Lower layers MUST NOT import upper layers.
 
-- When creating new components, place them in the correct FSD layer.
-- Do not create files inside the root app folder except route files.
-- Use /src for all FSD layers.
+Concretely:
+
+- app → can import: processes, pages, widgets, features, entities, shared
+- pages → can import: widgets, features, entities, shared
+- widgets → can import: features, entities, shared
+- features → can import: entities, shared
+- entities → can import: shared
+- shared → must NOT import from any other layer
+
+## Slices and public API
+
+- Each slice lives under its layer, e.g.:
+
+  - src/features/auth/login
+  - src/pages/home
+  - src/widgets/room
+  - src/entities/room
+
+- Inside a slice we use segments:
+
+  - ui/ – React components
+  - model/ – hooks, business logic, side-effects
+  - lib/ – pure functions
+  - api/ – API clients (if needed)
+  - config/ – constants, slice config (if needed)
+
+- Every slice MUST expose a public API via its root index file:
+
+  - src/features/auth/login/index.ts
+  - src/pages/home/index.ts
+  - src/widgets/room/index.ts
+  - src/entities/room/index.ts
+
+- Import from slices ONLY through their public API:
+  - ✅ import { LoginForm } from "@/features/auth/login"
+  - ❌ import { LoginForm } from "@/features/auth/login/ui/LoginForm"
+
+## Pages vs Widgets vs Features
+
+- Pages (`src/pages/*`):
+
+  - Compose widgets, features, and entities into a full page.
+  - May contain `ui/components/*` for page-specific UI that is not reused.
+  - Must NOT contain business logic, data fetching, or mutations directly.
+    - Delegate those to `features/*` or `entities/*`.
+
+- Widgets (`src/widgets/*`):
+
+  - Reusable, independent page sections (e.g. HomeHero, RoomHeader, SiteFooter).
+  - Must NOT depend on specific pages.
+  - Can compose features, entities, and shared UI.
+  - If a UI block is only used inside a single page and is tightly coupled to it,
+    keep it in `src/pages/<page>/ui/components` instead of widgets.
+
+- Features (`src/features/*`):
+  - Represent user-facing actions / use-cases, e.g.:
+    - `auth/login`, `auth/signup`, `meeting/create-room`, `meeting/generate-notes`
+  - Handle side-effects: mutations, data submission, event handlers.
+  - Can use:
+    - React Query / fetch clients
+    - entities’ types and helpers
+    - shared utilities and UI primitives
+  - Must NOT know about routing or specific page layouts.
+
+## Entities
+
+- `src/entities/*` hold domain models and their basic UI representations.
+  - Example: `entities/room`, `entities/message`, `entities/user`.
+- May contain:
+  - model/room.types.ts
+  - model/room.api.ts (query helpers)
+  - ui/RoomBadge.tsx, ui/MessageBubble.tsx
+- Entities must not depend on features, widgets, pages, or app.
+
+## Shared
+
+- `src/shared/*` is the lowest-level layer.
+- Contains:
+  - shared/ui – design system primitives (Button, Input, Modal, etc.)
+  - shared/lib – pure utilities (validation, date, audio, etc.)
+  - shared/config – runtime config, env parsing
+  - shared/types – global/common types
+- Shared must not import from any FSD layer.
+- Shared should be implementation-agnostic and reusable across slices.
+
+## Next.js routing
+
+- The routing layer lives in the root `app/` directory only.
+
+  - Example:
+    - app/page.tsx
+    - app/login/page.tsx
+    - app/home/page.tsx
+    - app/room/[roomId]/page.tsx
+
+- Route components MUST:
+
+  - Only compose FSD pages/widgets/features.
+  - Not contain business logic or data fetching directly
+    (delegate to features/entities).
+
+- Example:
+  - `app/login/page.tsx` should re-use `src/pages/auth-login`:
+    - `import { LoginPage } from "@/pages/auth-login"`
+    - `export default function Page() { return <LoginPage /> }`
+
+## Import path rules
+
+- Always use TS path aliases instead of long relative paths:
+
+  - ✅ "@/pages/home"
+  - ✅ "@/features/auth/login"
+  - ✅ "@/entities/room"
+  - ✅ "@/shared/ui/button"
+
+- Do not import across layers using relative paths like:
+
+  - ❌ "../../features/auth/login"
+  - ❌ "../../../shared/lib/validation"
+
+- Do not import deep internal files of other slices:
+  - ❌ "@/features/auth/login/ui/LoginForm"
+  - ✅ "@/features/auth/login"
