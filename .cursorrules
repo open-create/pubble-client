@@ -140,3 +140,33 @@ Concretely:
 - Do not import deep internal files of other slices:
   - ❌ "@/features/auth/login/ui/LoginForm"
   - ✅ "@/features/auth/login"
+
+## Same-layer dependencies
+
+- Within a slice (e.g. `entities/room`), segments (`ui/`, `model/`, `lib/`) may depend on each other.
+
+  - Avoid circular dependencies where possible.
+
+- Between slices in the same layer:
+
+  - Prefer composition from an upper layer or extracting shared logic to a lower layer.
+
+  - Features:
+
+    - Avoid importing one feature from another feature.
+    - If two features share logic, move it to `entities/*` or `shared/*`.
+
+  - Widgets:
+
+    - Avoid widgets importing other widgets.
+    - Compose multiple widgets inside `pages/*` instead.
+
+  - Entities:
+
+    - May occasionally import types/helpers from other entities,
+      but be careful with strong bidirectional coupling.
+      If it happens often, reconsider the domain boundaries.
+
+  - Pages:
+    - Must not import other pages.
+    - Shared UI between pages should go to `widgets/*` or `features/*`.

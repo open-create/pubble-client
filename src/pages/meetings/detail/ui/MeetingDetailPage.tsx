@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { InviteModal } from '@/features/meeting/invite-modal';
-import { Button } from '@/shared/ui';
+import { InviteModal } from '@/features';
+import { Button } from '@/shared';
 
 interface MeetingDetailPageProps {
   roomId: string;

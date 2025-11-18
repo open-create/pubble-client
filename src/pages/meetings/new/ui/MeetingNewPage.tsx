@@ -1,4 +1,4 @@
-import { CreateMeetingForm } from '@/features/meeting/create-room';
+import { CreateMeetingForm } from '@/features';
 
 export function MeetingNewPage() {
   return (

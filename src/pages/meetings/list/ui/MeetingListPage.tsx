@@ -2,9 +2,10 @@
 
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { Meeting, mockMeetings } from '@/entities/meeting';
-import { Button } from '@/shared/ui';
-import { InviteModal } from '@/features/meeting/invite-modal';
+import type { Meeting } from '@/entities';
+import { mockMeetings } from '@/entities';
+import { Button } from '@/shared';
+import { InviteModal } from '@/features';
 
 type FilterType = 'all' | 'ongoing' | 'ended';
 

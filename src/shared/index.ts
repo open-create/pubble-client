@@ -1,5 +1,8 @@
-// validation
-export type { ValidationResult } from './validation';
+// ui
+export { Input, Button, Modal } from './ui';
+
+// lib
+export type { ValidationResult } from './lib';
 export {
   validateEmail,
   validatePassword,
@@ -7,16 +10,14 @@ export {
   validatePasswordConfirm,
   validateNickname,
   validateRoomPassword,
-} from './validation';
-
-// auth
-export {
   AUTH_STORAGE_KEY,
   AUTH_CHANGE_EVENT,
   markUserAuthenticated,
   clearAuthState,
   isUserAuthenticated,
-} from './auth';
+  copyToClipboard,
+  shareToKakao,
+  shareToSMS,
+  shareToEmail,
+} from './lib';
 
-// share
-export { copyToClipboard, shareToKakao, shareToSMS, shareToEmail } from './share';

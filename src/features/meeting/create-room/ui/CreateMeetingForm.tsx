@@ -2,8 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Input } from '@/shared/ui';
-import { validateRoomPassword } from '@/shared/lib';
+import { Button, Input, validateRoomPassword } from '@/shared';
 
 interface FormErrors {
   title?: string;
