@@ -22,7 +22,9 @@ export function Hero(props: HeroProps) {
           <p className="uppercase tracking-widest text-white/70 text-sm">오늘의 회의</p>
           <h1 className="text-4xl font-semibold mt-2 mb-4">새 회의를 바로 시작해보세요</h1>
           <p className="text-white/80 text-lg max-w-xl">
-            팀원들과 채팅, 음성, 이미지를 동시에 공유하고 버튼 한 번으로 회의록을 받아보세요.
+            팀원들과 채팅, 음성, 이미지를 동시에 공유하고
+            <br />
+            버튼 한 번으로 회의록을 받아보세요.
           </p>
         </div>
 
@@ -49,11 +51,13 @@ export function Hero(props: HeroProps) {
           AI meeting workspace
         </p>
         <h1 className="text-4xl lg:text-5xl font-bold leading-tight mb-6">
-          회의 끝나면, <span className="text-primary">회의록은 퍼블</span>이 알아서.
+          회의 끝나면, <br />
+          <span className="text-primary">회의록은 퍼블</span>이 알아서.
         </h1>
         <p className="text-lg text-gray-600 mb-8">
-          텍스트·음성·이미지를 모두 모아서 AI가 회의록으로 정리해줘요. 팀원들은 회의에만 집중하면
-          됩니다.
+          텍스트·음성·이미지를 모두 모아서 AI가 회의록으로 정리해줘요.
+          <br />
+          팀원들은 회의에만 집중하면 됩니다.
         </p>
 
         <div className="flex flex-wrap gap-4">
@@ -65,17 +69,22 @@ export function Hero(props: HeroProps) {
             onClick={props.onScrollHowItWorks}
             className="text-base px-6 py-3"
           >
-            어떻게 동작하는지 보기
+            이용방법 보기
           </Button>
         </div>
       </div>
 
+      {/* 여기는 추후에 디자인 요소 들어가면 좋을 듯 */}
       <div className="bg-white/80 border border-secondary rounded-3xl p-8 shadow-xl">
         <h3 className="text-xl font-semibold mb-4 text-gray-900">회의록 미리보기</h3>
         <ul className="space-y-4 text-sm text-gray-600">
           <li>
             <span className="font-semibold text-gray-900">✔ 요약</span> · 회의 목표와 주요
             의사결정을 자동으로 정리합니다.
+          </li>
+          <li>
+            <span className="font-semibold text-gray-900">✔ 타임스탬프</span> · 발언 시각과 화자를
+            자동으로 기록합니다.
           </li>
           <li>
             <span className="font-semibold text-gray-900">✔ 액션 아이템</span> · 담당자와 기한까지

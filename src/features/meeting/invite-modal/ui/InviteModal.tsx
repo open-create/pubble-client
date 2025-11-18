@@ -1,26 +1,25 @@
 'use client';
 
 import { useState } from 'react';
-import { Modal, Input, Button } from '@/shared/ui';
-import {
-  validateRoomPassword,
-  copyToClipboard,
-  shareToKakao,
-  shareToSMS,
-  shareToEmail,
-} from '@/shared/lib';
+import { Modal, Button } from '@/shared/ui';
+import { copyToClipboard, shareToKakao, shareToSMS, shareToEmail } from '@/shared/lib';
 
 interface InviteModalProps {
   isOpen: boolean;
   onClose: () => void;
   inviteLink: string;
   meetingTitle: string;
+  isWelcome?: boolean;
 }
 
-export function InviteModal({ isOpen, onClose, inviteLink, meetingTitle }: InviteModalProps) {
+export function InviteModal({
+  isOpen,
+  onClose,
+  inviteLink,
+  meetingTitle,
+  isWelcome = false,
+}: InviteModalProps) {
   const [maxParticipants, setMaxParticipants] = useState(8);
-  const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
   const [copySuccess, setCopySuccess] = useState(false);
 
   const handleCopy = async () => {
@@ -31,18 +30,6 @@ export function InviteModal({ isOpen, onClose, inviteLink, meetingTitle }: Invit
     }
   };
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setPassword(value);
-
-    if (value) {
-      const result = validateRoomPassword(value);
-      setPasswordError(result.error || '');
-    } else {
-      setPasswordError('');
-    }
-  };
-
   const handleMaxParticipantsChange = (value: number) => {
     if (value >= 2 && value <= 20) {
       setMaxParticipants(value);
@@ -50,8 +37,19 @@ export function InviteModal({ isOpen, onClose, inviteLink, meetingTitle }: Invit
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="초대 링크" size="md">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={isWelcome ? '회의방이 생성되었습니다 🎉' : '초대 링크'}
+      size="md"
+    >
       <div className="space-y-6">
+        {isWelcome && (
+          <div className="bg-primary/10 border border-primary/20 rounded-2xl p-4 text-center">
+            <p className="text-lg font-semibold text-gray-900 mb-1">{meetingTitle}</p>
+            <p className="text-sm text-gray-600">팀원들을 초대하고 회의를 시작하세요!</p>
+          </div>
+        )}
         {/* 초대 링크 */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">초대 링크</label>
@@ -137,37 +135,39 @@ export function InviteModal({ isOpen, onClose, inviteLink, meetingTitle }: Invit
           </div>
         </div>
 
-        {/* 방 비밀번호 설정 */}
-        <div>
-          <Input
-            label="방 비밀번호 (선택)"
-            type="text"
-            inputMode="numeric"
-            placeholder="4~8자 숫자"
-            value={password}
-            onChange={handlePasswordChange}
-            error={passwordError}
-            maxLength={8}
-          />
-          <p className="mt-1 text-xs text-gray-500">
-            비밀번호를 설정하면 링크를 알아도 입장 시 비밀번호가 필요합니다.
-          </p>
-        </div>
-
         {/* 확인 버튼 */}
         <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
-          <Button variant="secondary" onClick={onClose}>
-            닫기
-          </Button>
-          <Button
-            onClick={() => {
-              // TODO: 설정 저장 로직 (API 호출)
-              console.log('Settings:', { maxParticipants, password });
-              onClose();
-            }}
-          >
-            설정 완료
-          </Button>
+          {isWelcome ? (
+            <>
+              <Button variant="secondary" onClick={onClose}>
+                나중에 초대하기
+              </Button>
+              <Button
+                onClick={() => {
+                  // TODO: 설정 저장 로직 (API 호출)
+                  console.log('Settings:', { maxParticipants });
+                  onClose();
+                }}
+              >
+                지금 회의 시작하기
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="secondary" onClick={onClose}>
+                닫기
+              </Button>
+              <Button
+                onClick={() => {
+                  // TODO: 설정 저장 로직 (API 호출)
+                  console.log('Settings:', { maxParticipants });
+                  onClose();
+                }}
+              >
+                설정 완료
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </Modal>
