@@ -2,16 +2,16 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Meeting } from '@/entities';
-import { mockMeetings } from '@/entities';
-import { AUTH_CHANGE_EVENT, clearAuthState, isUserAuthenticated } from '@/shared';
+import type { Meeting } from '@/entities/meeting';
+import { mockMeetings } from '@/entities/meeting';
+import { AUTH_CHANGE_EVENT, clearAuthState, isUserAuthenticated } from '@/shared/lib/auth';
 import { AuthHeader } from './components/AuthHeader';
 import { PublicHeader } from './components/PublicHeader';
 import { Hero } from './components/Hero';
 import { RecentMeetings } from './components/RecentMeetings';
 import { FeatureHighlights } from './components/FeatureHighlights';
 import { HowItWorks } from './components/HowItWorks';
-import { SiteFooter } from '@/widgets';
+import { SiteFooter } from '@/widgets/site-footer';
 
 export function HomePage() {
   const [authState, setAuthState] = useState<'loading' | 'authenticated' | 'guest'>('loading');

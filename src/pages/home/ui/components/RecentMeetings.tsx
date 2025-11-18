@@ -1,9 +1,9 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { Meeting } from '@/entities';
-import { Button } from '@/shared';
-import { InviteModal } from '@/features';
+import type { Meeting } from '@/entities/meeting';
+import { Button } from '@/shared/ui/button';
+import { InviteModal } from '@/features/meeting/invite-modal';
 
 interface RecentMeetingsProps {
   meetings: Meeting[];

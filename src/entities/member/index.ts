@@ -1,0 +1,1 @@
+// entity/member/index.ts

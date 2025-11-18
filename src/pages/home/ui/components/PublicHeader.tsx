@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Button } from '@/shared';
+import { Button } from '@/shared/ui/button';
 
 interface PublicHeaderProps {
   onLogin: () => void;

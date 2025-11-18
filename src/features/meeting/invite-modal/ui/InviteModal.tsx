@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Modal, Button, copyToClipboard, shareToKakao, shareToSMS, shareToEmail } from '@/shared';
+import { Modal } from '@/shared/ui/modal';
+import { Button } from '@/shared/ui/button';
+import { copyToClipboard, shareToEmail, shareToKakao, shareToSMS } from '@/shared/lib/share';
 
 interface InviteModalProps {
   isOpen: boolean;

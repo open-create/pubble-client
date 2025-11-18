@@ -1,0 +1,1 @@
+// entity/room/index.ts

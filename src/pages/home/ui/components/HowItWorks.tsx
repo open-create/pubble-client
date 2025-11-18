@@ -23,7 +23,7 @@ export function HowItWorks() {
         <p className="text-sm uppercase tracking-[0.3em] text-primary font-semibold mb-3">
           How it works
         </p>
-        <h2 className="text-3xl font-bold">"어떻게 쓰는지" 3단계</h2>
+        <h2 className="text-3xl font-bold">&ldquo;어떻게 쓰는지&rdquo; 3단계</h2>
       </div>
 
       <div className="grid gap-6 md:grid-cols-3">
