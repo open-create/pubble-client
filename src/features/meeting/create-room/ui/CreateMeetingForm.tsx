@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { Button, Input } from '@/shared/ui';
+import { InviteModal } from '@/features/meeting/invite-modal';
 
 // type RetentionPolicy = 'A';
 
@@ -16,6 +17,7 @@ export function CreateMeetingForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [inviteLink, setInviteLink] = useState<string | null>(null);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [showInviteModal, setShowInviteModal] = useState(false);
 
   const previewExpiration = useMemo(() => {
     const now = new Date();
@@ -117,22 +119,33 @@ export function CreateMeetingForm() {
       </form>
 
       {inviteLink && (
-        <div className="mt-8 bg-primary/5 border border-primary/20 rounded-3xl p-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="text-sm text-primary font-semibold uppercase tracking-widest">
-              초대 링크
-            </p>
-            <p className="text-xl font-semibold text-gray-900 mt-1">{inviteLink}</p>
-            <p className="text-sm text-gray-600">팀원에게 공유하면 바로 회의에 참여할 수 있어요.</p>
+        <>
+          <div className="mt-8 bg-primary/5 border border-primary/20 rounded-3xl p-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-sm text-primary font-semibold uppercase tracking-widest">
+                초대 링크 생성 완료
+              </p>
+              <p className="text-xl font-semibold text-gray-900 mt-1">{inviteLink}</p>
+              <p className="text-sm text-gray-600">
+                초대 설정 버튼을 눌러 공유하거나 인원/비밀번호를 설정하세요.
+              </p>
+            </div>
+            <Button
+              type="button"
+              onClick={() => setShowInviteModal(true)}
+              className="w-full md:w-auto"
+            >
+              초대 설정 열기
+            </Button>
           </div>
-          <Button
-            type="button"
-            onClick={() => navigator.clipboard?.writeText(inviteLink)}
-            className="w-full md:w-auto"
-          >
-            링크 복사하기
-          </Button>
-        </div>
+
+          <InviteModal
+            isOpen={showInviteModal}
+            onClose={() => setShowInviteModal(false)}
+            inviteLink={inviteLink}
+            meetingTitle={title || '새 회의'}
+          />
+        </>
       )}
     </>
   );
