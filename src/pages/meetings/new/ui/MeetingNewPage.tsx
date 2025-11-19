@@ -1,6 +1,16 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { CreateMeetingForm } from '@/features/meeting/create-room';
 
 export function MeetingNewPage() {
+  const router = useRouter();
+
+  const handleCreateSuccess = (roomId: string, title: string) => {
+    // 회의방 생성 성공 → 바로 회의방으로 라우팅 (초대 모달 자동 표시)
+    router.push(`/meetings/${roomId}?showInvite=true&title=${encodeURIComponent(title)}`);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4">
       <div className="max-w-3xl mx-auto">
@@ -14,7 +24,7 @@ export function MeetingNewPage() {
           </p>
         </div>
 
-        <CreateMeetingForm />
+        <CreateMeetingForm onSuccess={handleCreateSuccess} />
       </div>
     </div>
   );
