@@ -2,26 +2,26 @@
 
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Meeting } from '@/entities/meeting';
-import { mockMeetings } from '@/entities/meeting';
+import type { Room } from '@/entities/room';
+import { mockRooms } from '@/entities/room';
 import { Button } from '@/shared/ui/button';
 import { InviteModal } from '@/features/meeting/invite-modal';
 
-type FilterType = 'all' | 'ongoing' | 'ended';
+type FilterType = 'all' | 'active' | 'ended';
 
 export function MeetingListPage() {
   const router = useRouter();
   const [filter, setFilter] = useState<FilterType>('all');
-  const [selectedMeeting, setSelectedMeeting] = useState<Meeting | null>(null);
+  const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
 
-  const filteredMeetings = useMemo(() => {
-    if (filter === 'all') return mockMeetings;
-    return mockMeetings.filter((meeting) => meeting.status === filter);
+  const filteredRooms = useMemo(() => {
+    if (filter === 'all') return mockRooms;
+    return mockRooms.filter((room) => room.status === filter);
   }, [filter]);
 
   const statusMeta = useMemo(
     () => ({
-      ongoing: {
+      active: {
         label: '진행 중',
         badgeClass: 'bg-emerald-100 text-emerald-700',
       },
@@ -33,18 +33,18 @@ export function MeetingListPage() {
     []
   );
 
-  const handleMeetingClick = (meeting: Meeting) => {
-    router.push(`/meetings/${meeting.id}`);
+  const handleRoomClick = (room: Room) => {
+    router.push(`/meetings/${room.id}`);
   };
 
-  const handleShareClick = (e: React.MouseEvent, meeting: Meeting) => {
+  const handleShareClick = (e: React.MouseEvent, room: Room) => {
     e.stopPropagation();
-    setSelectedMeeting(meeting);
+    setSelectedRoom(room);
   };
 
-  const handleViewMinutes = (e: React.MouseEvent, meetingId: string) => {
+  const handleViewMinutes = (e: React.MouseEvent, roomId: string) => {
     e.stopPropagation();
-    window.location.href = `/minutes/${meetingId}`;
+    window.location.href = `/minutes/${roomId}`;
   };
 
   return (
@@ -72,9 +72,9 @@ export function MeetingListPage() {
             </button>
             <button
               type="button"
-              onClick={() => setFilter('ongoing')}
+              onClick={() => setFilter('active')}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filter === 'ongoing'
+                filter === 'active'
                   ? 'bg-primary text-white'
                   : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
               }`}
@@ -101,37 +101,37 @@ export function MeetingListPage() {
 
         {/* 회의 목록 */}
         <div className="space-y-3">
-          {filteredMeetings.length > 0 ? (
-            filteredMeetings.map((meeting) => (
+          {filteredRooms.length > 0 ? (
+            filteredRooms.map((room) => (
               <div
-                key={meeting.id}
+                key={room.id}
                 className="bg-white hover:bg-gray-50 transition-colors rounded-2xl px-6 py-5 border border-gray-100 shadow-sm"
               >
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                   <button
                     type="button"
-                    onClick={() => handleMeetingClick(meeting)}
+                    onClick={() => handleRoomClick(room)}
                     className="flex-1 text-left"
                   >
-                    <p className="text-xl font-semibold text-gray-900 mb-1">{meeting.title}</p>
-                    <p className="text-sm text-gray-500">{meeting.createdAt}</p>
+                    <p className="text-xl font-semibold text-gray-900 mb-1">{room.title}</p>
+                    <p className="text-sm text-gray-500">{room.createdAt}</p>
                   </button>
 
                   <div className="flex flex-wrap items-center gap-3">
                     <span
                       className={`px-3 py-1 text-sm rounded-full font-medium ${
-                        statusMeta[meeting.status].badgeClass
+                        statusMeta[room.status].badgeClass
                       }`}
                     >
-                      {statusMeta[meeting.status].label}
+                      {statusMeta[room.status].label}
                     </span>
 
-                    {meeting.status === 'ended' && (
+                    {room.status === 'ended' && (
                       <>
-                        {meeting.hasMinutes ? (
+                        {room.noteId ? (
                           <button
                             type="button"
-                            onClick={(e) => handleViewMinutes(e, meeting.id)}
+                            onClick={(e) => handleViewMinutes(e, room.id)}
                             className="px-3 py-1 text-sm rounded-full font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
                           >
                             회의록 보기
@@ -146,7 +146,7 @@ export function MeetingListPage() {
 
                     <button
                       type="button"
-                      onClick={(e) => handleShareClick(e, meeting)}
+                      onClick={(e) => handleShareClick(e, room)}
                       className="p-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-600 hover:text-primary"
                       title="공유하기"
                     >
@@ -171,7 +171,7 @@ export function MeetingListPage() {
           ) : (
             <div className="bg-white rounded-2xl p-12 text-center border border-gray-100">
               <p className="text-gray-500 mb-4">
-                {filter === 'ongoing' && '진행 중인 회의가 없습니다.'}
+                {filter === 'active' && '진행 중인 회의가 없습니다.'}
                 {filter === 'ended' && '종료된 회의가 없습니다.'}
                 {filter === 'all' && '아직 회의가 없습니다.'}
               </p>
@@ -182,12 +182,12 @@ export function MeetingListPage() {
       </div>
 
       {/* 초대 모달 */}
-      {selectedMeeting && (
+      {selectedRoom && (
         <InviteModal
-          isOpen={!!selectedMeeting}
-          onClose={() => setSelectedMeeting(null)}
-          inviteLink={`https://pubble.com/meet/${selectedMeeting.id}`}
-          meetingTitle={selectedMeeting.title}
+          isOpen={!!selectedRoom}
+          onClose={() => setSelectedRoom(null)}
+          inviteLink={`https://pubble.com/meet/${selectedRoom.id}`}
+          meetingTitle={selectedRoom.title}
         />
       )}
     </div>

@@ -1,1 +1,3 @@
-// entity/note/index.ts
+// model
+export type { Note } from './model/types';
+
