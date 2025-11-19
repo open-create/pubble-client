@@ -1,1 +1,3 @@
-// entity/member/index.ts
+// model
+export type { Member, MemberRole } from './model/types';
+

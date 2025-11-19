@@ -1,23 +1,23 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { Meeting } from '@/entities/meeting';
+import type { Room } from '@/entities/room';
 import { Button } from '@/shared/ui/button';
 import { InviteModal } from '@/features/meeting/invite-modal';
 
 interface RecentMeetingsProps {
-  meetings: Meeting[];
-  onMeetingClick: (meeting: Meeting) => void;
+  rooms: Room[];
+  onRoomClick: (room: Room) => void;
   onViewAll: () => void;
 }
 
-export function RecentMeetings({ meetings, onMeetingClick, onViewAll }: RecentMeetingsProps) {
-  const hasMeetings = meetings.length > 0;
-  const [selectedMeeting, setSelectedMeeting] = useState<Meeting | null>(null);
+export function RecentMeetings({ rooms, onRoomClick, onViewAll }: RecentMeetingsProps) {
+  const hasRooms = rooms.length > 0;
+  const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
 
   const statusMeta = useMemo(
     () => ({
-      ongoing: {
+      active: {
         label: '진행 중',
         badgeClass: 'bg-emerald-100 text-emerald-700',
       },
@@ -29,15 +29,15 @@ export function RecentMeetings({ meetings, onMeetingClick, onViewAll }: RecentMe
     []
   );
 
-  const handleShareClick = (e: React.MouseEvent, meeting: Meeting) => {
+  const handleShareClick = (e: React.MouseEvent, room: Room) => {
     e.stopPropagation();
-    setSelectedMeeting(meeting);
+    setSelectedRoom(room);
   };
 
-  const handleViewMinutes = (e: React.MouseEvent, meetingId: string) => {
+  const handleViewMinutes = (e: React.MouseEvent, roomId: string) => {
     e.stopPropagation();
     // 회의록 페이지로 이동
-    window.location.href = `/minutes/${meetingId}`;
+    window.location.href = `/minutes/${roomId}`;
   };
 
   return (
@@ -54,37 +54,37 @@ export function RecentMeetings({ meetings, onMeetingClick, onViewAll }: RecentMe
         </Button>
       </div>
 
-      {hasMeetings ? (
+      {hasRooms ? (
         <div className="space-y-3">
-          {meetings.map((meeting) => (
+          {rooms.map((room) => (
             <div
-              key={meeting.id}
+              key={room.id}
               className="w-full bg-slate-50 hover:bg-slate-100 transition-colors rounded-2xl px-5 py-4 border border-slate-100"
             >
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <button
                   type="button"
-                  onClick={() => onMeetingClick(meeting)}
+                  onClick={() => onRoomClick(room)}
                   className="flex-1 text-left"
                 >
-                  <p className="text-lg font-semibold text-gray-900">{meeting.title}</p>
-                  <p className="text-sm text-gray-500">{meeting.createdAt}</p>
+                  <p className="text-lg font-semibold text-gray-900">{room.title}</p>
+                  <p className="text-sm text-gray-500">{room.createdAt}</p>
                 </button>
 
                 <div className="flex flex-wrap items-center gap-3">
                   <span
                     className={`px-3 py-1 text-sm rounded-full font-medium ${
-                      statusMeta[meeting.status].badgeClass
+                      statusMeta[room.status].badgeClass
                     }`}
                   >
-                    {statusMeta[meeting.status].label}
+                    {statusMeta[room.status].label}
                   </span>
-                  {meeting.status === 'ended' && (
+                  {room.status === 'ended' && (
                     <>
-                      {meeting.hasMinutes ? (
+                      {room.noteId ? (
                         <button
                           type="button"
-                          onClick={(e) => handleViewMinutes(e, meeting.id)}
+                          onClick={(e) => handleViewMinutes(e, room.id)}
                           className="px-3 py-1 text-sm rounded-full font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
                         >
                           회의록 보기
@@ -98,7 +98,7 @@ export function RecentMeetings({ meetings, onMeetingClick, onViewAll }: RecentMe
                   )}
                   <button
                     type="button"
-                    onClick={(e) => handleShareClick(e, meeting)}
+                    onClick={(e) => handleShareClick(e, room)}
                     className="p-2 rounded-lg hover:bg-white transition-colors text-gray-600 hover:text-primary"
                     title="공유하기"
                   >
@@ -120,12 +120,12 @@ export function RecentMeetings({ meetings, onMeetingClick, onViewAll }: RecentMe
         <div className="text-center py-12 text-gray-500">아직 진행된 회의가 없습니다.</div>
       )}
 
-      {selectedMeeting && (
+      {selectedRoom && (
         <InviteModal
-          isOpen={!!selectedMeeting}
-          onClose={() => setSelectedMeeting(null)}
-          inviteLink={`https://pubble.com/meet/${selectedMeeting.id}`}
-          meetingTitle={selectedMeeting.title}
+          isOpen={!!selectedRoom}
+          onClose={() => setSelectedRoom(null)}
+          inviteLink={`https://pubble.com/meet/${selectedRoom.id}`}
+          meetingTitle={selectedRoom.title}
         />
       )}
     </section>

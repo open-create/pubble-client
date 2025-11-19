@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Meeting } from '@/entities/meeting';
-import { mockMeetings } from '@/entities/meeting';
+import type { Room } from '@/entities/room';
+import { mockRooms } from '@/entities/room';
 import { AUTH_CHANGE_EVENT, clearAuthState, isUserAuthenticated } from '@/shared/lib/auth';
 import { AuthHeader } from './components/AuthHeader';
 import { PublicHeader } from './components/PublicHeader';
@@ -52,11 +52,11 @@ export function HomePage() {
 
 function AuthenticatedHome({ onLogout }: { onLogout: () => void }) {
   const router = useRouter();
-  const [meetings] = useState<Meeting[]>(mockMeetings);
+  const [rooms] = useState<Room[]>(mockRooms);
 
-  const handleMeetingClick = (meeting: Meeting) => {
+  const handleRoomClick = (room: Room) => {
     // 진행 중이든 종료되었든 회의방으로 이동 (종료된 회의는 읽기 전용)
-    router.push(`/meetings/${meeting.id}`);
+    router.push(`/meetings/${room.id}`);
   };
 
   const handleLogout = () => {
@@ -74,8 +74,8 @@ function AuthenticatedHome({ onLogout }: { onLogout: () => void }) {
           onViewMinutes={() => router.push('/minutes')}
         />
         <RecentMeetings
-          meetings={meetings}
-          onMeetingClick={handleMeetingClick}
+          rooms={rooms}
+          onRoomClick={handleRoomClick}
           onViewAll={() => router.push('/meetings')}
         />
       </div>

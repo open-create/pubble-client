@@ -1,1 +1,3 @@
-// entity/user/index.ts
+// model
+export type { User } from './model/types';
+
