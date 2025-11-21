@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { InviteModal } from '@/features/meeting/invite-modal';
 import { Button } from '@/shared/ui/button';
+import { SmartTimer } from '@/widgets/room-timer';
 
 interface MeetingDetailPageProps {
   roomId: string;
@@ -14,12 +15,17 @@ export function MeetingDetailPage({ roomId }: MeetingDetailPageProps) {
   const shouldShowInvite = searchParams?.get('showInvite') === 'true';
   const [showInviteModal, setShowInviteModal] = useState(shouldShowInvite);
   const [isWelcome, setIsWelcome] = useState(shouldShowInvite);
+  const [isEnded, setIsEnded] = useState(false);
+
+  const handleExpire = () => {
+    setIsEnded(true);
+  };
 
   // Query parameter로 전달된 회의 제목 (없으면 기본값)
   const meetingTitle = searchParams?.get('title') || '새 회의';
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className={`min-h-screen bg-gray-100 ${isEnded ? 'bg-red-100' : ''}`}>
       {/* 회의방 정보 섹션 */}
       <section className="bg-white border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-6 py-4">
@@ -39,17 +45,7 @@ export function MeetingDetailPage({ roomId }: MeetingDetailPageProps) {
                   </svg>
                   참여자 3명
                 </span>
-                <span className="flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  진행 중
-                </span>
+                <SmartTimer onExpire={handleExpire} inline />
               </div>
             </div>
 
