@@ -1,2 +1,3 @@
-// model
-export type { Message, MessageType } from './model/types';
+export * from './model/types';
+export { mockMessages } from './lib/mockMessages';
+export { MessageBubble } from './ui/MessageBubble';
