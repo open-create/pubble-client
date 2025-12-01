@@ -1,5 +1,6 @@
 import { MeetingDetailPage } from '@/pages/meetings/detail';
 
-export default function RoomPage({ params }: { params: { roomId: string } }) {
-  return <MeetingDetailPage roomId={params.roomId} />;
+export default async function RoomPage({ params }: { params: Promise<{ roomId: string }> }) {
+  const { roomId } = await params;
+  return <MeetingDetailPage roomId={roomId} />;
 }
