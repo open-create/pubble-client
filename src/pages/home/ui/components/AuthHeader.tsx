@@ -1,30 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
 import type { SVGProps } from 'react';
+import { mockCurrentUser } from '@/entities/user';
+import { UserProfileMenu } from '@/features/user/profile-menu';
 
 interface AuthHeaderProps {
   onLogout: () => void;
 }
 
 export function AuthHeader({ onLogout }: AuthHeaderProps) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (!menuOpen) return;
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [menuOpen]);
-
   return (
     <header className="flex items-center justify-between">
       <Link href="/" className="text-2xl font-bold text-primary">
@@ -40,39 +25,7 @@ export function AuthHeader({ onLogout }: AuthHeaderProps) {
           <BellIcon className="w-5 h-5" />
         </button>
 
-        <div className="relative" ref={menuRef}>
-          <button
-            type="button"
-            onClick={() => setMenuOpen((prev) => !prev)}
-            className="flex items-center gap-3 bg-white border border-gray-200 rounded-full pl-4 pr-2 py-1.5 shadow-sm"
-          >
-            <div className="text-right">
-              <p className="text-sm text-gray-500 leading-tight">Product Owner</p>
-              <p className="font-semibold text-gray-900 leading-tight">김해원</p>
-            </div>
-            <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-semibold">
-              HW
-            </div>
-          </button>
-
-          {menuOpen && (
-            <div className="absolute right-0 mt-3 w-60 bg-white border border-gray-100 rounded-2xl shadow-xl p-4">
-              <p className="text-sm text-gray-500">demo@pubble.com</p>
-              <div className="mt-4 space-y-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    onLogout();
-                    setMenuOpen(false);
-                  }}
-                  className="w-full text-left text-sm font-medium text-red-500 hover:text-red-600"
-                >
-                  로그아웃
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+        <UserProfileMenu user={mockCurrentUser} onLogout={onLogout} />
       </div>
     </header>
   );

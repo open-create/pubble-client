@@ -1,7 +1,6 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Input } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
 import { markUserAuthenticated } from '@/shared/lib/auth';
@@ -17,8 +16,11 @@ interface LoginFormErrors {
   password?: string;
 }
 
-export function LoginForm() {
-  const router = useRouter();
+interface LoginFormProps {
+  onSuccess?: () => void;
+}
+
+export function LoginForm({ onSuccess }: LoginFormProps) {
   const [formData, setFormData] = useState<LoginFormData>({ email: '', password: '' });
   const [errors, setErrors] = useState<LoginFormErrors>({});
   const [touched, setTouched] = useState<Record<keyof LoginFormData, boolean>>({
@@ -98,7 +100,7 @@ export function LoginForm() {
 
       if (result.success) {
         markUserAuthenticated();
-        router.push('/');
+        onSuccess?.();
       } else {
         setAuthError('이메일 또는 비밀번호가 올바르지 않습니다.');
       }

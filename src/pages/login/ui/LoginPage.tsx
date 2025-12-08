@@ -1,7 +1,16 @@
+'use client';
+
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { LoginForm } from '@/features/auth/login';
 
 export function LoginPage() {
+  const router = useRouter();
+
+  const handleLoginSuccess = () => {
+    router.push('/');
+  };
+
   return (
     <div className="min-h-[calc(100vh-60px)] flex items-center justify-center bg-secondary/30 px-4">
       <div className="w-full max-w-md">
@@ -11,7 +20,7 @@ export function LoginPage() {
             <p className="text-gray-600">다시 만나서 반가워요!</p>
           </div>
 
-          <LoginForm />
+          <LoginForm onSuccess={handleLoginSuccess} />
 
           <div className="mt-6 text-center">
             <p className="text-gray-600">

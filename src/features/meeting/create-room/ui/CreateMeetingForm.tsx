@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { validateRoomPassword } from '@/shared/lib/validation';
@@ -12,8 +11,11 @@ interface FormErrors {
   password?: string;
 }
 
-export function CreateMeetingForm() {
-  const router = useRouter();
+interface CreateMeetingFormProps {
+  onSuccess?: (roomId: string, title: string) => void;
+}
+
+export function CreateMeetingForm({ onSuccess }: CreateMeetingFormProps) {
   const [title, setTitle] = useState('');
   const [purpose, setPurpose] = useState('');
   const [password, setPassword] = useState('');
@@ -77,8 +79,8 @@ export function CreateMeetingForm() {
 
     const roomId = Math.random().toString(36).substring(2, 8).toUpperCase();
 
-    // 회의방 생성 성공 → 바로 회의방으로 라우팅 (초대 모달 자동 표시)
-    router.push(`/meetings/${roomId}?showInvite=true&title=${encodeURIComponent(title)}`);
+    // 회의방 생성 성공 → 상위 레이어에서 라우팅 처리
+    onSuccess?.(roomId, title);
   };
 
   return (

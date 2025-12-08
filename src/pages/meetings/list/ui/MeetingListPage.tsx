@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Room } from '@/entities/room';
-import { mockRooms } from '@/entities/room';
+import { mockRooms, RoomList } from '@/entities/room';
 import { Button } from '@/shared/ui/button';
 import { InviteModal } from '@/features/meeting/invite-modal';
 
@@ -19,32 +19,22 @@ export function MeetingListPage() {
     return mockRooms.filter((room) => room.status === filter);
   }, [filter]);
 
-  const statusMeta = useMemo(
-    () => ({
-      active: {
-        label: '진행 중',
-        badgeClass: 'bg-emerald-100 text-emerald-700',
-      },
-      ended: {
-        label: '종료',
-        badgeClass: 'bg-gray-100 text-gray-700',
-      },
-    }),
-    []
-  );
-
   const handleRoomClick = (room: Room) => {
     router.push(`/meetings/${room.id}`);
   };
 
-  const handleShareClick = (e: React.MouseEvent, room: Room) => {
-    e.stopPropagation();
+  const handleShareClick = (room: Room) => {
     setSelectedRoom(room);
   };
 
-  const handleViewMinutes = (e: React.MouseEvent, roomId: string) => {
-    e.stopPropagation();
+  const handleViewMinutes = (roomId: string) => {
     window.location.href = `/minutes/${roomId}`;
+  };
+
+  const getEmptyMessage = () => {
+    if (filter === 'active') return '진행 중인 회의가 없습니다.';
+    if (filter === 'ended') return '종료된 회의가 없습니다.';
+    return '아직 회의가 없습니다.';
   };
 
   return (
@@ -100,85 +90,20 @@ export function MeetingListPage() {
         </div>
 
         {/* 회의 목록 */}
-        <div className="space-y-3">
-          {filteredRooms.length > 0 ? (
-            filteredRooms.map((room) => (
-              <div
-                key={room.id}
-                className="bg-white hover:bg-gray-50 transition-colors rounded-2xl px-6 py-5 border border-gray-100 shadow-sm"
-              >
-                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                  <button
-                    type="button"
-                    onClick={() => handleRoomClick(room)}
-                    className="flex-1 text-left"
-                  >
-                    <p className="text-xl font-semibold text-gray-900 mb-1">{room.title}</p>
-                    <p className="text-sm text-gray-500">{room.createdAt}</p>
-                  </button>
-
-                  <div className="flex flex-wrap items-center gap-3">
-                    <span
-                      className={`px-3 py-1 text-sm rounded-full font-medium ${
-                        statusMeta[room.status].badgeClass
-                      }`}
-                    >
-                      {statusMeta[room.status].label}
-                    </span>
-
-                    {room.status === 'ended' && (
-                      <>
-                        {room.noteId ? (
-                          <button
-                            type="button"
-                            onClick={(e) => handleViewMinutes(e, room.id)}
-                            className="px-3 py-1 text-sm rounded-full font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
-                          >
-                            회의록 보기
-                          </button>
-                        ) : (
-                          <span className="px-3 py-1 text-sm rounded-full font-medium bg-gray-100 text-gray-500">
-                            생성 중
-                          </span>
-                        )}
-                      </>
-                    )}
-
-                    <button
-                      type="button"
-                      onClick={(e) => handleShareClick(e, room)}
-                      className="p-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-600 hover:text-primary"
-                      title="공유하기"
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="bg-white rounded-2xl p-12 text-center border border-gray-100">
-              <p className="text-gray-500 mb-4">
-                {filter === 'active' && '진행 중인 회의가 없습니다.'}
-                {filter === 'ended' && '종료된 회의가 없습니다.'}
-                {filter === 'all' && '아직 회의가 없습니다.'}
-              </p>
-              <Button onClick={() => router.push('/meetings/new')}>첫 회의 만들기</Button>
-            </div>
-          )}
-        </div>
+        {filteredRooms.length > 0 ? (
+          <RoomList
+            rooms={filteredRooms}
+            onRoomClick={handleRoomClick}
+            onShare={handleShareClick}
+            onViewMinutes={handleViewMinutes}
+            emptyMessage={getEmptyMessage()}
+          />
+        ) : (
+          <div className="bg-white rounded-2xl p-12 text-center border border-gray-100">
+            <p className="text-gray-500 mb-4">{getEmptyMessage()}</p>
+            <Button onClick={() => router.push('/meetings/new')}>첫 회의 만들기</Button>
+          </div>
+        )}
       </div>
 
       {/* 초대 모달 */}
